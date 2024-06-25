@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
+import cors from 'cors'
 
 dotenv.config()
 
@@ -17,6 +18,8 @@ mongoose.connect(process.env.MONGO)
 const App = express()
 App.use(express.json());
 
+App.use(cors({origin:'http://localhost:5173'}))
+
 App.listen(3000, () =>{
     console.log("Server listening on port 3000")
 })
@@ -30,6 +33,6 @@ App.use((err,req,res,next) => {
     return res.status(statusCode).json({
         success : false,
         message,
-        statusCode
+        statusCode,
     })
 })
