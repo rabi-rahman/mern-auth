@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO)
 const App = express()
 App.use(express.json());
 
-App.use(cors({origin:'http://localhost:5173'}))
+App.use(cors({origin:['http://localhost:5173'],credentials:true}))
 
 App.listen(3000, () =>{
     console.log("Server listening on port 3000")
