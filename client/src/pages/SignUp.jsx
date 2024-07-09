@@ -6,7 +6,7 @@ import OAuth from '../components/OAuth';
 export default function SignUp() {
   const [formData,setFormData] = useState({});
   const [loading,setLoading] = useState(false);
-  const [error,setError] = useState(false);
+  const [errors,setErrors] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,15 +17,15 @@ export default function SignUp() {
     e.preventDefault();
     try {
       setLoading(true);
-      setError(false);
       const res = await axios.post('http://localhost:3000/api/auth/signup', formData);
       console.log(res.data);
       setLoading(false);
       navigate('/sign-in')
     } catch (error) {
-      setLoading(false);
-      setError(true);
-      console.log(error)
+        setLoading(false);
+        setErrors(error.response?.data?.message || 'Something went wrong');
+        console.log(error.response.data.message)
+        
     }
   };
   return (
@@ -44,7 +44,7 @@ export default function SignUp() {
         <span className='text-blue-500'>Sign in</span>
         </Link>
       </div>
-      <p className='text-red-700 mt-5' >{error && 'Something went wrong'}</p>
+      <p className='text-red-700 mt-5' >{errors ? errors || 'Something went wrong' : ''}</p>
     </div>
   )
 }

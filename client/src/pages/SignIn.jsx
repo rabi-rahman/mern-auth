@@ -8,6 +8,7 @@ import OAuth from '../components/OAuth';
 
 export default function SignIn() {
   const [formData,setFormData] = useState({});
+  const [errors,setErrors] = useState(null)
   const {loading,error} = useSelector((state)=>state.user)
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,7 +29,8 @@ export default function SignIn() {
     } catch (error) {
       if (error.response){
         console.log(error.response.data)
-        dispatch(signInFailure(error.response.data.message  ))
+        setErrors(error.response?.data?.message || 'Something went wrong');
+        dispatch(signInFailure(error.response.data.message))
       }
       
       
@@ -49,7 +51,7 @@ export default function SignIn() {
         <span className='text-blue-500'>Sign Up</span>
         </Link>
       </div>
-      <p className='text-red-700 mt-5' >{error? error || 'Something went wrong' : ''}</p>
+      <p className='text-red-700 mt-5' >{errors ? errors || 'Something went wrong' : ''}</p>
     </div>
   )
 }
