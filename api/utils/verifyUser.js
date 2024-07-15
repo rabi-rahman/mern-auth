@@ -8,7 +8,8 @@ export const verifyToken = (req,res,next) => {
         return next(errorHandler(401, 'You are not Authenticated'));
     }
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return next(errorHandler(403, 'Token is Invalid'))
+        if (err) return next(errorHandler(403, 'Token is Invalid'));
+        
         req.user = user;
         next();
     });
