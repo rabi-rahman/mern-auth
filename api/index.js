@@ -21,7 +21,7 @@ App.use(express.json());
 
 App.use(cookieParser());
 
-App.use(cors({origin:['http://localhost:5173'],credentials:true}))
+App.use(cors({origin:'http://localhost:5173',credentials:true}))
 
 App.listen(3000, () =>{
     console.log("Server listening on port 3000")
