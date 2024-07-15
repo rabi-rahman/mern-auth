@@ -3,7 +3,9 @@ import { useRef, useState, useEffect } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from "../firebase";
 import axios from "axios";
-import { updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure } from "../redux/user/userSlice";
+import { updateUserStart,updateUserSuccess,updateUserFailure,
+  deleteUserStart,deleteUserSuccess,deleteUserFailure,
+  signOutStart,signOutSuccess,signOutFailure } from "../redux/user/userSlice";
 
 
 export default function Profile() {
@@ -63,15 +65,27 @@ export default function Profile() {
       }
     }
 
-    const handleDeleteAccount = async (e) => {
+    const handleDeleteAccount = async () => {
       try {
         dispatch(deleteUserStart());
         const res = await axios.delete(`http://localhost:3000/api/user/delete/${currentUser._id}`);
-        dispatch(deleteUserSuccess());
+        dispatch(deleteUserSuccess(res.data));
       } catch (error) {
         (error.response)
         console.log(error.response.data)
         dispatch(deleteUserFailure(error.response.data.message))
+      }
+    }
+
+    const handleSignout = async () => {
+      try {
+        dispatch(signOutStart());
+        const res = await axios.get("http://localhost:3000/api/auth/signout");
+        dispatch(signOutSuccess(res.data));
+      } catch (error) {
+        (error.response)
+        console.log(error.response.data)
+        dispatch(signOutFailure(error.response.data.message))
       }
     }
 
@@ -96,7 +110,7 @@ export default function Profile() {
     </form>
     <div className="flex justify-between mt-5">
       <span className="text-red-700 cursor-pointer" onClick={handleDeleteAccount}>Delete Account</span>
-      <span className="text-red-700 cursor-pointer">Sign out</span>
+      <span className="text-red-700 cursor-pointer" onClick={handleSignout}>Sign out</span>
     </div>
     <p className="text-red-700 mt-5">{error && "something went wrong"}</p>
     <p className="text-green-700 mt-5">{updateStatus  && "User is updated successfully"}</p>
